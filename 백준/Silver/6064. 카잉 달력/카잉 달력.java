@@ -1,32 +1,38 @@
-import java.util.Scanner;
+
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int T = sc.nextInt();
-		
+	public static void main(String[] args) throws Exception {
 
-		for (int s = 0; s < T; s++) {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-			boolean check = false;
-			int m = sc.nextInt();
-			int n = sc.nextInt();
-			int x = sc.nextInt() - 1;
-			int y = sc.nextInt() - 1;
+		int T = Integer.parseInt(br.readLine());
 
-			for (int i = x; i < (n * m); i += m) {
-				if (i % n == y) {
-					System.out.println(i + 1);
-					check = true;
-					break;
-				}
-			}
+		StringBuilder sb = new StringBuilder();
 
-			if (!check) {
-				System.out.println(-1);
+		while (T-- > 0) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int N = Integer.parseInt(st.nextToken());
+			int M = Integer.parseInt(st.nextToken());
+			int x = Integer.parseInt(st.nextToken()) - 1;
+			int y = Integer.parseInt(st.nextToken()) - 1;
+			sb.append(solve(N, M, x, y)).append("\n");
+		}
 
+		System.out.println(sb);
+
+	}
+
+	private static int solve(int N, int M, int x, int y) {
+		for (int i = x; i < (N * M); i += N) {
+			if (i % M == y) {
+				return i + 1;
 			}
 		}
+
+		return -1;
 	}
+
 }
