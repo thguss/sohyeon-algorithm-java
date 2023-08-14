@@ -30,3 +30,18 @@
 
  <p>첫째 줄에 문제의 정답을 출력한다.</p>
 
+# MEMO (분리 집합 메소드)
+```
+	private static int find(int x) {
+		if (parent[x] == x) return x;
+		parent[x] = find(parent[x]);
+		return parent[x];
+	}
+
+	private static void union(int a, int b) {
+		int pa = find(a);
+		int pb = find(b);
+		if (pa < pb) parent[pb] = pa;
+		else parent[pa] = pb;
+	}
+```
