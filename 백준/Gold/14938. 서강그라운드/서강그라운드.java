@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.util.*;
 
@@ -50,7 +49,7 @@ public class Main {
 			graph.get(b).add(new Node(a, l));
 		}
 
-		int max = 0;
+		int max = Integer.MIN_VALUE;
 
 		// System.out.println(Arrays.toString(item));
 
