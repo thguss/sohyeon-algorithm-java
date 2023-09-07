@@ -56,19 +56,18 @@ public class Main {
 		boolean compare4 = Math.min(p[2].y, p[3].y) <= Math.max(p[0].y, p[1].y);
 
 		if (p123 * p124 == 0 && p341 * p342 == 0) {
-			is_result = true;
 			if (compare1 && compare2 && compare3 && compare4) {
-				res = 1;
+				return 1;
+			} else {
+				return 0;
 			}
 		}
 
 		if (p123 * p124 <= 0 && p341 * p342 <= 0) {
-			if (!is_result) {
-				res = 1;
-			}
+			return 1;
 		}
 
-		return res;
+		return 0;
 	}
 
 	private static int ccw(Point p1, Point p2, Point p3) {
