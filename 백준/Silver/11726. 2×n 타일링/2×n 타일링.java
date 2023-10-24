@@ -1,25 +1,28 @@
-
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
 
+	static final int MOD = 10007;
+
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringTokenizer st;
 
-		int N = Integer.parseInt(st.nextToken());
+		int n = Integer.parseInt(br.readLine());
 
-		int[] dp = new int[N + 1];
-
-		for (int i = 1; i <= N; i++) {
-			if (i == 1) dp[i] = 1;
-			else if (i == 2) dp[i] = 2;
-			else dp[i] = (dp[i - 1] + dp[i - 2]) % 10007;
+		if (n == 1) {
+			System.out.println(1);
+		} else if (n == 2) {
+			System.out.println(2);
+		} else {
+			int[] dp = new int[n + 1];
+			dp[1] = 1;
+			dp[2] = 2;
+			for (int i = 3; i <= n; i++) {
+				dp[i] = (dp[i - 1] + dp[i - 2]) % MOD;
+			}
+			System.out.println(dp[n]);
 		}
-
-
-		System.out.println(dp[N]);
-
 	}
 }
