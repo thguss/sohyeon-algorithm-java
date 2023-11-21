@@ -2,34 +2,43 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] maps) {
+        return bfs(maps);
+    }
+    
+    private int bfs(int[][] maps) {
+        int n = maps.length;
+        int m = maps[0].length;
+        
         Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[] {0, 0, 1});
         
-        int[] dx = {1, -1, 0, 0};
-        int[] dy = {0, 0, 1, -1};
-        int n = maps.length;
-        int m = maps[0].length;
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
         
         boolean[][] visited = new boolean[n][m];
         visited[0][0] = true;
         
-        while(!queue.isEmpty()) {
-            int[] cur = queue.poll();
+        while (!queue.isEmpty()) {
+            int[] now = queue.poll();
             
-            if (cur[0] == n - 1 && cur[1] == m - 1) {
-                return cur[2];
+            if (now[0] == n - 1 && now[1] == m - 1) {
+                return now[2];
             }
             
             for (int i = 0; i < 4; i++) {
-                int nx = cur[0] + dx[i];
-                int ny = cur[1] + dy[i];
-                if (0 <= nx && nx < n && 0 <= ny && ny < m && !visited[nx][ny] && maps[nx][ny] == 1) {
+                int nx = now[0] + dx[i];
+                int ny = now[1] + dy[i];
+                if (check(maps, n, m, nx, ny, visited)) {
                     visited[nx][ny] = true;
-                    queue.add(new int[] {nx, ny, cur[2] + 1});
+                    queue.add(new int[] {nx, ny, now[2] + 1});
                 }
             }
         }
         
         return -1;
+    }
+    
+    private boolean check(int[][] maps, int n, int m, int nx, int ny, boolean[][] visited) {
+        return 0 <= nx && nx < n && 0 <= ny && ny < m && !visited[nx][ny] && maps[nx][ny] == 1;
     }
 }
