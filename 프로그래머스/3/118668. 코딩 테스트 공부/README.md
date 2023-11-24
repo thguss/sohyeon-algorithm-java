@@ -1,6 +1,6 @@
 # [level 3] 코딩 테스트 공부 - 118668 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/118668?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/118668?language=python3) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2023년 11월 5일 18:48:57
+2023년 11월 5일 18:49:13
 
 ### 문제 설명
 
