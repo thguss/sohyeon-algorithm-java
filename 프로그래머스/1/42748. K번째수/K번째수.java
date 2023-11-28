@@ -3,21 +3,23 @@ import java.util.*;
 class Solution {
     public int[] solution(int[] array, int[][] commands) {
         int[] answer = new int[commands.length];
-        int index = 0;
         
-        for (int[] command : commands) {
-            answer[index++] = solve(array, command[0] - 1, command[1] - 1, command[2] - 1);
+        for (int i = 0; i < commands.length; i++) {
+            int s = commands[i][0];
+            int e = commands[i][1];
+            int k = commands[i][2];
+            answer[i] = find(array, s, e, k);
         }
         
         return answer;
     }
     
-    private int solve(int[] arr, int s, int e, int k) {
+    private int find(int[] arr, int s, int e, int k) {
         List<Integer> al = new ArrayList<>();
-        for (int i = s; i <= e; i++) {
+        for (int i = s - 1; i <= e - 1; i++) {
             al.add(arr[i]);
         }
         Collections.sort(al);
-        return al.get(k);
+        return al.get(k - 1);
     }
 }
