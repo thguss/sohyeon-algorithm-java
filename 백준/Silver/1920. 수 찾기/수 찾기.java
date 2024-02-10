@@ -1,46 +1,57 @@
-import java.io.*;
+import java.lang.reflect.Member;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
+import java.io.*;
 
-// 수 찾기
+import org.w3c.dom.Node;
+
 public class Main {
 
-	static ArrayList<Integer> al = new ArrayList<>();
+	static int[] A;
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		// StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int n = Integer.parseInt(br.readLine());
+		int N = Integer.parseInt(br.readLine());
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < n; i++) {
-			al.add(Integer.parseInt(st.nextToken()));
-		}
 
-		Collections.sort(al);
-
-		int m = Integer.parseInt(br.readLine());
-		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < m; i++) {
+		A = new int[N];
+		for (int i = 0; i < N; i++) {
 			int num = Integer.parseInt(st.nextToken());
-			System.out.println(bs(num));
+			A[i] = num;
+		}
+		Arrays.sort(A);
+
+		int M = Integer.parseInt(br.readLine());
+		st = new StringTokenizer(br.readLine());
+
+		for (int i = 0; i < M; i++) {
+			int num = Integer.parseInt(st.nextToken());
+			System.out.println(isContainedInArr(num) ? 1 : 0);
 		}
 	}
 
-	private static int bs(int num) {
+	private static boolean isContainedInArr(int target) {
 		int left = 0;
-		int right = al.size() - 1;
+		int right = A.length - 1;
 
 		while (left <= right) {
 			int mid = (left + right) / 2;
 
-			if (al.get(mid) == num) return 1;
+			if (A[mid] == target) {
+				return true;
+			}
 
-			if (num > al.get(mid)) {
+			if (A[mid] < target) { // 작으니까 더 큰 곳에서 찾기
 				left = mid + 1;
 			} else {
 				right = mid - 1;
 			}
 		}
 
-		return 0;
+		return false;
 	}
 }
