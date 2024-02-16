@@ -23,7 +23,13 @@ public class Main {
 
 		@Override
 		public int compareTo(Nation o) {
-			return o.getScore() - this.getScore();
+			if (this.goldCnt == o.goldCnt) {
+				if (this.silverCnt == o.silverCnt) {
+					return o.bronzeCnt - this.bronzeCnt;
+				}
+				return o.silverCnt - this.silverCnt;
+			}
+			return o.goldCnt - this.goldCnt;
 		}
 	}
 
@@ -50,28 +56,28 @@ public class Main {
 		}
 
 		Collections.sort(nations);
-		System.out.println(getRank(N, K, nations));
+		solve(N, K, nations);
 	}
 
-	static int getRank(int N, int K, List<Nation> nations) {
-		if (N == 1) {
-			return 1;
-		}
-
-		int rank = 1;
+	static void solve(int N, int K, List<Nation> nations) {
+		int endPoint = 0;
 		nations.get(0).rank = 1;
 
 		for (int i = 1; i < N; i++) {
-			rank++;
 			Nation nation = nations.get(i);
 			Nation preNation = nations.get(i - 1);
-			nations.get(i).rank = (nation.getScore() == preNation.getScore()) ? preNation.rank : rank;
 
 			if (nation.num == K) {
-				return nation.rank;
+				endPoint = i;
+			}
+
+			if (nation.goldCnt == preNation.goldCnt && nation.silverCnt == preNation.silverCnt && nation.bronzeCnt == preNation.bronzeCnt) {
+				nation.rank = preNation.rank;
+			} else {
+				nation.rank = i + 1;
 			}
 		}
 
-		return -1;
+		System.out.println(nations.get(endPoint).rank);
 	}
 }
