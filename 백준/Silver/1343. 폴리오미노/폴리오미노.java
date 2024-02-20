@@ -5,13 +5,39 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		String board = getBoard();
-		System.out.println(solve(board));
+		StringBuilder sb = solve(board.split("\\."));
+
+		if (sb.toString().equals("-1")) {
+			System.out.println(sb);
+		} else {
+			sb.append(".".repeat(board.length() - sb.toString().length()));
+			System.out.println(sb);
+		}
 	}
 
-	static String solve(String board) {
-		String str = board.replaceAll("XXXX", "AAAA");
-		String res = str.replaceAll("XX", "BB");
-		return res.contains("X") ? "-1" : res;
+	static StringBuilder solve(String[] board) {
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < board.length; i++) {
+			String str = board[i];
+
+			if (str.length() % 2 != 0) {
+				return new StringBuilder("-1");
+			}
+
+			if (str.length() % 4 == 0) {
+				sb.append("AAAA".repeat(str.length() / 4));
+			} else {
+				sb.append("AAAA".repeat(str.length() / 4));
+				sb.append("BB".repeat((str.length() % 4) / 2));
+			}
+
+			if (i != board.length - 1) {
+				sb.append(".");
+			}
+		}
+
+		return sb;
 	}
 
 	static String getBoard() throws IOException {
