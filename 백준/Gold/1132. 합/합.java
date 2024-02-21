@@ -55,11 +55,9 @@ public class Main {
 
 		for (int i = 0; i < N; i++) {
 			String str = br.readLine();
-			int index = str.charAt(0) - 'A';
-			alphabets[index].value += (long)Math.pow(10, (str.length() - 1)); // 10^(자릿수)
-			alphabets[index].isFirst = true;
-			for (int j = 1; j < str.length(); j++) {
-				index = str.charAt(j) - 'A';
+			for (int j = 0; j < str.length(); j++) {
+				int index = str.charAt(j) - 'A';
+				if (j == 0) alphabets[index].isFirst = true;
 				alphabets[index].value += (long)Math.pow(10, (str.length() - 1 - j)); // 10^(자릿수)
 			}
 		}
