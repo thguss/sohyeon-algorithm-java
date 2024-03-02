@@ -1,48 +1,60 @@
-
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-
-	static boolean[] visited;
-	static ArrayList<ArrayList<Integer>> al;
-	static int res = 0;
+	static int N, M;
 
 	public static void main(String[] args) throws Exception {
+		List<List<Integer>> graph = getGraph();
+		boolean[] visited = new boolean[N + 1];
+		int count = 0;
+
+		for (int i = 1; i <= N; i++) {
+			if (!visited[i]) {
+				bfs(graph, visited, i);
+				count++;
+			}
+		}
+
+		System.out.println(count);
+	}
+
+	static void bfs(List<List<Integer>> graph, boolean[] visited, int start) {
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(start);
+
+		visited[start] = true;
+
+		while (!queue.isEmpty()) {
+			int cur = queue.poll();
+			for (int next : graph.get(cur)) {
+				if (!visited[next]) {
+					visited[next] = true;
+					queue.add(next);
+				}
+			}
+		}
+	}
+
+	static List<List<Integer>> getGraph() throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
-		al = new ArrayList<>();
-		for (int i = 0; i <= N; i++) al.add(new ArrayList<>());
+		List<List<Integer>> graph = new ArrayList<>();
+		for (int i = 0; i <= N; i++) graph.add(new ArrayList<>());
+
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
 			int u = Integer.parseInt(st.nextToken());
 			int v = Integer.parseInt(st.nextToken());
-			al.get(u).add(v);
-			al.get(v).add(u);
+			graph.get(u).add(v);
+			graph.get(v).add(u);
 		}
 
-		visited = new boolean[N + 1];
-
-		for (int i = 1; i <= N; i++) {
-			if (visited[i]) continue;
-			dfs(i);
-			res++;
-		}
-
-		System.out.println(res);
-
+		return graph;
 	}
 
-	private static void dfs(int v) {
-		if (visited[v]) return;
-		visited[v] = true;
-		for (int u : al.get(v)) {
-			dfs(u);
-		}
-
-	}
 }
