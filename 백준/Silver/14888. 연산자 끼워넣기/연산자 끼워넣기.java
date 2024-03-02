@@ -1,70 +1,64 @@
-
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
 
 	static int N;
-	static int[] numbers, operator;
-	static boolean[] visited;
-	static int max, min;
+	static Map<Character, Integer> map = new HashMap<>();
+	static int min = Integer.MAX_VALUE;
+	static int max = Integer.MIN_VALUE;
 
 	public static void main(String[] args) throws Exception {
-		getInput();
-
-		max = Integer.MIN_VALUE;
-		min = Integer.MAX_VALUE;
-
-		dfs(numbers[0], 1);
-
+		int[] arr = getArr();
+		calculate(arr, 0, arr[0], map.get('+'), map.get('-'), map.get('*'), map.get('/'));
 		System.out.println(max);
 		System.out.println(min);
 	}
 
-	private static void dfs(int result, int index) {
-		for (int i = 0; i < 4; i++) {
+	static void calculate(int[] arr, int depth, int res, int plus, int minus, int multiple, int divide) {
+		if (depth == N - 1) {
+			min = Math.min(min, res);
+			max = Math.max(max, res);
+			return;
+		}
 
-			if (index >= numbers.length) {
-				max = Math.max(max, result);
-				min = Math.min(min, result);
-				continue;
-			}
+		if (plus > 0) {
+			calculate(arr, depth + 1, res + arr[depth + 1], plus - 1, minus, multiple, divide);
+		}
 
-			if (operator[i] <= 0) continue;
+		if (minus > 0) {
+			calculate(arr, depth + 1, res - arr[depth + 1], plus, minus - 1, multiple, divide);
+		}
 
-			operator[i]--;
+		if (multiple > 0) {
+			calculate(arr, depth + 1, res * arr[depth + 1], plus, minus, multiple - 1, divide);
+		}
 
-			switch (i) {
-				case 0: 
-					dfs(result + numbers[index], index + 1);
-					break;
-				case 1: 
-					dfs(result - numbers[index], index + 1);
-					break;
-				case 2: 
-					dfs(result * numbers[index], index + 1);
-					break;
-				case 3: 
-					dfs(result / numbers[index], index + 1);
-					break;
-			}
-
-			operator[i]++;
+		if (divide > 0) {
+			calculate(arr, depth + 1, res / arr[depth + 1], plus, minus, multiple, divide - 1);
 		}
 	}
 
-	private static void getInput() throws Exception {
+	static int[] getArr() throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+		// StringTokenizer st = new StringTokenizer(br.readLine());
 
-		N = Integer.parseInt(br.readLine());
+		N = Integer.parseInt(br.readLine()); // 수의 개수
 
-		numbers = new int[N];
+		int[] arr = new int[N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		for (int i = 0; i < N; i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+
 		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) numbers[i] = Integer.parseInt(st.nextToken());
+		map.put('+', Integer.parseInt(st.nextToken()));
+		map.put('-', Integer.parseInt(st.nextToken()));
+		map.put('*', Integer.parseInt(st.nextToken()));
+		map.put('/', Integer.parseInt(st.nextToken()));
 
-		operator = new int[4]; // + - * /
-		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < 4; i++) operator[i] = Integer.parseInt(st.nextToken());
+		return arr;
 	}
+
 }
