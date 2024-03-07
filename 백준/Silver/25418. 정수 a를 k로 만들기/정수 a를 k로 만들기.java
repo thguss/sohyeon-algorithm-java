@@ -6,7 +6,24 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		input();
-		System.out.println(bfs(A, K));
+		// System.out.println(bfs(A, K));
+		System.out.println(dp(A, K));
+	}
+
+	static int dp(int A, int K) {
+		int[] dp = new int[K + 1];
+		Arrays.fill(dp, 1000001);
+		dp[A] = 0;
+
+		for (int i = A + 1; i <= K; i++) {
+			dp[i] = dp[i - 1];
+			if (i % 2 == 0 && dp[i] > dp[i / 2]) {
+				dp[i] = dp[i / 2];
+			}
+			dp[i]++;
+		}
+
+		return dp[K];
 	}
 
 	static int bfs(int A, int K) {
