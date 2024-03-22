@@ -1,67 +1,55 @@
-
-
 import java.util.*;
 import java.io.*;
 
 public class Main {
-
-	static int R, C;
-	static String[][] board;
+	static int N, M;
 	static int[] dx = {1, -1, 0, 0};
 	static int[] dy = {0, 0, 1, -1};
-	static int res = 0;
-	static boolean[][] visited;
-	static boolean[] alphabet;
+	static int max = Integer.MIN_VALUE;
 
 	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		R = Integer.parseInt(st.nextToken());
-		C = Integer.parseInt(st.nextToken());
-
-		board = new String[R][C];
-
-		for (int i = 0; i < R; i++) {
-			String[] arr = br.readLine().split("");
-			for (int j = 0; j < C; j++) {
-				board[i][j] = arr[j];
-			}
-		}
-
-		alphabet = new boolean[26];
-
-		visited = new boolean[R][C];
-		// visited[0][0] = true;
-
-		alphabet[board[0][0].charAt(0) - 'A'] = true;
-
-		dfs(0, 0, 1);
-
-		System.out.println(res);
+		char[][] board = getBoard();
+		boolean[] visited = new boolean['Z' - 'A' + 1];
+		visited[board[0][0] - 'A'] = true;
+		dfs(board, 0, 0, 1, visited);
+		System.out.println(max);
 	}
 
-	private static void dfs(int x, int y, int n) {
-
+	static void dfs(char[][] board, int x, int y, int cnt, boolean[] visited) {
+		boolean isGo = false;
 		for (int i = 0; i < 4; i++) {
 			int nx = x + dx[i];
 			int ny = y + dy[i];
+			if (0 <= nx && nx < N && 0 <= ny && ny < M) {
+				if (visited[board[nx][ny] - 'A']) continue;
+				isGo = true;
+				visited[board[nx][ny] - 'A'] = true;
+				dfs(board, nx, ny, cnt + 1, visited);
+				visited[board[nx][ny] - 'A'] = false;
+			}
+		}
+		if (!isGo) {
+			max = Math.max(max, cnt);
+		}
+	}
 
-			if (0 <= nx && nx < R && 0 <= ny && ny < C) {
-				if (alphabet[board[nx][ny].charAt(0) - 'A']) {
-					res = Math.max(res, n);
-					continue;
-				}
+	static char[][] getBoard() throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-				// visited[nx][ny] = true;
-				alphabet[board[nx][ny].charAt(0) - 'A'] = true;
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 
-				dfs(nx, ny, n + 1);
+		char[][] board = new char[N][M];
 
-				// visited[nx][ny] = false;
-				alphabet[board[nx][ny].charAt(0) - 'A'] = false;
+		for (int i = 0; i < N; i++) {
+			String str = br.readLine();
+			for (int j = 0; j < M; j++) {
+				board[i][j] = str.charAt(j);
 			}
 		}
 
+		return board;
 	}
+
 }
