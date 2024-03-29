@@ -1,57 +1,54 @@
-import java.lang.reflect.Member;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.*;
 import java.io.*;
 
-import org.w3c.dom.Node;
-
 public class Main {
 
-	static int[] A;
+	public static void main(String[] args) throws Exception {
+		System.out.println(solve());
+	}
 
-	public static void main(String[] args) throws IOException {
+	static String solve() throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		// StringTokenizer st = new StringTokenizer(br.readLine());
 
 		int N = Integer.parseInt(br.readLine());
-		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		A = new int[N];
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int[] arr = new int[N];
 		for (int i = 0; i < N; i++) {
-			int num = Integer.parseInt(st.nextToken());
-			A[i] = num;
+			arr[i] = Integer.parseInt(st.nextToken());
 		}
-		Arrays.sort(A);
+		Arrays.sort(arr);
 
 		int M = Integer.parseInt(br.readLine());
-		st = new StringTokenizer(br.readLine());
+		StringBuilder sb = new StringBuilder();
 
+		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < M; i++) {
-			int num = Integer.parseInt(st.nextToken());
-			System.out.println(isContainedInArr(num) ? 1 : 0);
+			int target = Integer.parseInt(st.nextToken());
+			sb.append(bs(arr, target) ? 1 : 0).append("\n");
 		}
+
+		return sb.toString();
 	}
 
-	private static boolean isContainedInArr(int target) {
+	static boolean bs(int[] arr, int target) {
 		int left = 0;
-		int right = A.length - 1;
+		int right = arr.length - 1;
 
 		while (left <= right) {
 			int mid = (left + right) / 2;
 
-			if (A[mid] == target) {
-				return true;
-			}
+			if (arr[mid] == target) return true;
 
-			if (A[mid] < target) { // 작으니까 더 큰 곳에서 찾기
-				left = mid + 1;
-			} else {
+			if (arr[mid] > target) {
 				right = mid - 1;
+			} else {
+				left = mid + 1;
 			}
 		}
 
 		return false;
 	}
+
 }
