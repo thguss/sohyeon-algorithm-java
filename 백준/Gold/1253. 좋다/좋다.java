@@ -5,42 +5,41 @@ public class Main {
 	static int N;
 
 	public static void main(String[] args) throws Exception {
-		int[] numbers = getNumbers();
-		System.out.println(getGoodCnt(numbers));
+		int[] arr = getArr();
+		System.out.println(getCount(arr));
 	}
 
-	static int getGoodCnt(int[] numbers) {
-		Arrays.sort(numbers);
+	static int getCount(int[] arr) {
 		int cnt = 0;
 
 		for (int i = 0; i < N; i++) {
-			if (bs(numbers, i)) {
-				cnt++;
-			}
+			if (bs(arr, i)) cnt++;
 		}
 
 		return cnt;
 	}
 
-	static boolean bs(int[] numbers, int i) {
+	static boolean bs(int[] arr, int i) {
 		int left = 0;
 		int right = N - 1;
 
 		while (true) {
 			if (left == i) left++;
-			else if (right == i) right--;
+			if (right == i) right--;
 
 			if (left >= right) break;
 
-			if (numbers[left] + numbers[right] > numbers[i]) right--;
-			else if (numbers[left] + numbers[right] < numbers[i]) left++;
+			int sum = arr[left] + arr[right];
+
+			if (sum > arr[i]) right--;
+			else if (sum < arr[i]) left++;
 			else return true;
 		}
 
 		return false;
 	}
 
-	static int[] getNumbers() throws IOException {
+	static int[] getArr() throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		// StringTokenizer st = new StringTokenizer(br.readLine());
 
@@ -52,6 +51,8 @@ public class Main {
 		for (int i = 0; i < N; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
+
+		Arrays.sort(arr);
 
 		return arr;
 	}
