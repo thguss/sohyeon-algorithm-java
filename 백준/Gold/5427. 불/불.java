@@ -54,7 +54,7 @@ public class Main {
 
 	static String bfs(char[][] board, int[][] fired, int x, int y) {
 		Queue<int[]> queue = new PriorityQueue<>((a, b) -> a[2] - b[2]);
-		queue.add(new int[] {x, y, 1});
+		queue.add(new int[] {x, y, 0});
 
 		boolean[][] visited = new boolean[H][W];
 		visited[x][y] = true;
@@ -68,13 +68,13 @@ public class Main {
 
 				if (0 <= nx && nx < H && 0 <= ny && ny < W) {
 					if (!visited[nx][ny] && board[nx][ny] == '.') {
-						if (cur[2] + 1 < fired[nx][ny] || fired[nx][ny] == 0) {
+						if (cur[2] + 1 < fired[nx][ny] - 1 || fired[nx][ny] == 0) {
 							visited[nx][ny] = true;
 							queue.add(new int[] {nx, ny, cur[2] + 1});
 						}
 					}
 				} else {
-					return String.valueOf(cur[2]);
+					return String.valueOf(cur[2] + 1);
 				}
 			}
 		}
