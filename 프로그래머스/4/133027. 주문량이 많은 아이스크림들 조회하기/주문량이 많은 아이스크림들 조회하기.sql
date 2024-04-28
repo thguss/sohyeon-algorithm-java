@@ -1,10 +1,8 @@
--- 코드를 입력하세요
-# SELECT FLAVOR, SUM(TOTAL_ORDER) AS TOTAL_ORDER
-# FROM JULY
-# GROUP BY FLAVOR
-
-SELECT A.FLAVOR
-FROM FIRST_HALF A JOIN (SELECT FLAVOR, SUM(TOTAL_ORDER) AS TOTAL_ORDER FROM JULY GROUP BY FLAVOR) B
-ON A.FLAVOR = B.FLAVOR
-ORDER BY (A.TOTAL_ORDER + B.TOTAL_ORDER) DESC
-LIMIT 3;
+select b.flavor
+from first_half a join (
+    select flavor, sum(total_order) as total_order
+    from july
+    group by flavor
+) b on a.flavor = b.flavor
+order by (a.total_order + b.total_order) desc
+limit 3
