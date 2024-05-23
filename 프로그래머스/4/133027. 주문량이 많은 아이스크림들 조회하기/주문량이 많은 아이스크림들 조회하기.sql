@@ -1,8 +1,8 @@
-select b.flavor
-from first_half a join (
-    select flavor, sum(total_order) as total_order
-    from july
+select A.flavor
+from FIRST_HALF A inner join (
+    select flavor, SUM(TOTAL_ORDER) as TOTAL_ORDER_SUM
+    from JULY
     group by flavor
-) b on a.flavor = b.flavor
-order by (a.total_order + b.total_order) desc
+) B on A.flavor = B.flavor
+order by (A.total_order + B.total_order_sum) desc
 limit 3
