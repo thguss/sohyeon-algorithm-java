@@ -1,50 +1,46 @@
-import java.lang.reflect.Member;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-import org.w3c.dom.Node;
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    
+    public static void main(String[] args) throws Exception {
+        while (true) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
 
-public class Main {
+            if (a == 0 && b == 0 && c == 0) break;
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		// StringTokenizer st = new StringTokenizer(br.readLine());
+            String type = getType(new int[] {a, b, c});
+            bw.write(type + "\n");
+        }
 
-		while (true) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
+        bw.flush();
+    }
 
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			int c = Integer.parseInt(st.nextToken());
+    private static String getType(int[] arr) {
+        Arrays.sort(arr);
+        int a = arr[0];
+        int b = arr[1];
+        int c = arr[2];
 
-			if (a == 0 && b == 0 && c == 0) {
-				break;
-			}
+        if (c >= a + b) {
+            return "Invalid";
+        }
+        
+        if (a == b && b == c && c == a) {
+            return "Equilateral";
+        }
 
-			System.out.println(getDefinition(new int[] {a, b, c}));
-		}
+        if (a == b || b == c || c == a) {
+            return "Isosceles";
+        }
 
-	}
-
-	private static String getDefinition(int[] arr) {
-		Arrays.sort(arr);
-		int a = arr[0];
-		int b = arr[1];
-		int c = arr[2];
-
-		if (c >= (a + b)) {
-			return "Invalid";
-		}
-
-		if (a == b && b == c) {
-			return "Equilateral";
-		} else if (a != b && b != c && c != a) {
-			return "Scalene";
-		} else {
-			return "Isosceles";
-		}
-	}
+        return "Scalene";
+    }
 }
