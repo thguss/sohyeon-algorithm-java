@@ -1,54 +1,60 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	static int N, P;
-	static long score;
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(st.nextToken());
+        long score = Long.valueOf(st.nextToken());
+        int size = Integer.valueOf(st.nextToken());
 
-	public static void main(String[] args) throws IOException {
-		long[] rankingList = getRankingList(); // 오름차순 정렬
-		System.out.println(getRank(rankingList));
-	}
+        List<Long> al = new ArrayList<>();
 
-	static int getRank(long[] rankingList) {
-		if (P == N && rankingList[0] >= score) {
-			return -1;
-		}
+        if (N > 0) {
+            st = new StringTokenizer(br.readLine());
+            
+            for (int i = 0; i < N; i++) {
+                al.add(Long.valueOf(st.nextToken()));
+            }
 
-		int rank = 1;
+            Collections.sort(al, (a, b) -> Long.compare(b, a));
+        }
 
-		for (int i = P - 1; i >= Math.max(0, P - N - 1); i--) {
-			if (rankingList[i] > score) {
-				rank++;
-			} else {
-				return rank;
-			}
-		}
+        if (N == 0) bw.write("1");
 
-		return rank;
-	}
+        else if (al.size() == size && score <= al.get(al.size() - 1)) {
+            bw.write("-1");
+        } else {
+            if (al.size() < N && score < al.get(al.size() - 1)) {
+                bw.write(String.valueOf(al.size() + 1));
+            } else {
+                int rank = 0;
 
-	static long[] getRankingList() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+                //System.out.println(al);
+                
+                for (int i = 0; i < al.size(); i++) {
+                    if (al.get(i) > score) {
+                        rank++;
+                    } else {
+                        break;
+                    }
+                }
 
-		N = Integer.parseInt(st.nextToken()); // 리스트 내 점수 개수
-		score = Long.parseLong(st.nextToken()); // 태수의 점수
-		P = Integer.parseInt(st.nextToken()); // 랭킹 리스트 점수 개수
+                if (N == size && rank > size) {
+                    bw.write("-1");
+                } else {
+                    bw.write(String.valueOf(rank + 1));
+                }
+            }
+        }
 
-		long[] rankingList = new long[P];
+        bw.flush();
+    }
 
-		if (N > 0) {
-			st = new StringTokenizer(br.readLine());
-			for (int i = 0; i < N; i++) {
-				rankingList[i] = Long.parseLong(st.nextToken());
-			}
-		}
-
-		Arrays.sort(rankingList);
-
-		return rankingList;
-	}
 
 }
