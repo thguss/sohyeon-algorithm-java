@@ -1,54 +1,44 @@
-
-import java.io.*;
 import java.util.*;
+import java.lang.*;
+import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    
+    public static void main(String[] args) throws Exception {
+        int M = Integer.valueOf(br.readLine());
+        List<Integer> al = new ArrayList<>();
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
-		ArrayList<Integer> S = new ArrayList<>();
-		StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < M; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            String cmd = st.nextToken();
 
-		for (int i = 0; i < N; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			String command = st.nextToken();
-			if (command.equals("add")) {
-				int num = Integer.parseInt(st.nextToken());
-				if (!S.contains(num)) {
-					S.add(num);
-				}
-			} else if (command.equals("remove")) {
-				int num = Integer.parseInt(st.nextToken());
-				if (S.contains(num)) {
-					S.remove(Integer.valueOf(num));
-				}
-			} else if (command.equals("check")) {
-				int num = Integer.parseInt(st.nextToken());
-				if (S.contains(num)) {
-					sb.append(1).append("\n");
-				} else {
-					sb.append(0).append("\n");
-				}
-			} else if (command.equals("toggle")) {
-				int num = Integer.parseInt(st.nextToken());
-				if (S.contains(num)) {
-					S.remove(Integer.valueOf(num));
-				} else {
-					S.add(num);
-				}
-			} else if (command.equals("all")) {
-				S.clear();
-				for (int x = 1; x <= 20; x++) {
-					S.add(x);
-				}
-			} else if (command.equals("empty")) {
-				S.clear();
-			}
-		}
+            if (cmd.equals("all")) {
+                al.clear();
+                for (int j = 1; j <= 20; j++) {
+                    al.add(j);
+                }
+            } else if (cmd.equals("empty")) {
+                al.clear();
+            } else {
+                int x = Integer.valueOf(st.nextToken());
+                if (cmd.equals("add")) {
+                    if (!al.contains(x)) al.add(x);
+                } else if (cmd.equals("remove")) {
+                    if (al.contains(x)) al.remove(Integer.valueOf(x));
+                } else if (cmd.equals("check")) {
+                    int check = al.contains(x) ? 1 : 0;
+                    bw.write(String.valueOf(check) + "\n");
+                } else if (cmd.equals("toggle")) {
+                    if (!al.contains(x)) {
+                        al.add(x);
+                    } else al.remove(Integer.valueOf(x));
+                }
+            }
+        }
 
-		System.out.println(sb);
-
-	}
-
+        bw.flush();
+    }
 }
