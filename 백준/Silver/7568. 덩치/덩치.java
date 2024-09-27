@@ -1,34 +1,48 @@
-
-import java.io.*;
 import java.util.*;
+import java.lang.*;
+import java.io.*;
 
-public class Main {
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int N = Integer.parseInt(br.readLine());
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-		int[][] arr = new int[N][2];
+    static class Size {
+        int weight;
+        int height;
+        int rank = 1;
 
-		for (int i = 0; i < N; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int x = Integer.parseInt(st.nextToken());
-			int y = Integer.parseInt(st.nextToken());
-			arr[i][0] = x;
-			arr[i][1] = y;
-		}
+        public Size (int weight, int height) {
+            this.weight = weight;
+            this.height = height;
+        }
+    }
+    
+    public static void main(String[] args) throws Exception {
+        int N = Integer.valueOf(br.readLine());
 
-		for (int i = 0; i < N; i++) {
-			int rank = 1;
+        List<Size> al = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int weight = Integer.valueOf(st.nextToken());
+            int height = Integer.valueOf(st.nextToken());
+            al.add(new Size(weight, height));
+        }
 
-			for (int j = 0; j < N; j++) {
-				if (i == j) continue;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (i != j) {
+                    if (al.get(i).weight < al.get(j).weight && al.get(i).height < al.get(j).height) {
+                        al.get(i).rank++;
+                    }
+                }
+            }
+        }
 
-				if (arr[i][0] < arr[j][0] && arr[i][1] < arr[j][1]) {
-					rank++;
-				}
-			}
+        for (int i = 0; i < N; i++) {
+            bw.write(String.valueOf(al.get(i).rank + " "));
+        }
+        bw.flush();
+    }
 
-			System.out.print(rank + " ");
-		}
-	}
 }
