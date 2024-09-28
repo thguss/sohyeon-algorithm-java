@@ -1,62 +1,60 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	static int N, M;
+    public static void main(String[] args) throws Exception {
+        //StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(br.readLine());
+        int M = Integer.valueOf(br.readLine());
 
-	public static void main(String[] args) throws Exception {
-		int[] lights = getLights();
-		System.out.println(bs(lights));
-	}
+        int[] arr = new int[M];
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-	static int bs(int[] lights) {
-		int left = 1; // 굴다리 최소 길이
-		int right = N; // 굴다리 최대 길이
-		int result = N;
+        for (int i = 0; i < M; i++) {
+            arr[i] = Integer.valueOf(st.nextToken());
+        }
 
-		while (left <= right) {
-			int mid = (left + right) / 2;
-			if (isBrightAll(lights, mid)) {
-				result = Math.min(result, mid);
-				right = mid - 1;
-			} else {
-				left = mid + 1;
-			}
-		}
+        bw.write(String.valueOf(solve(arr, N)));
 
-		return result;
-	}
+        bw.flush();
+    }
 
-	static boolean isBrightAll(int[] lights, int height) {
-		int brightPoint = 0;
+    private static int solve(int[] arr, int N) {
+        int left = 1;
+        int right = N;
+        int min = Integer.MAX_VALUE;
 
-		for (int lightPosition : lights) {
-			if (lightPosition - height <= brightPoint) {
-				brightPoint = lightPosition + height; // 현재 가로등이 비추는 거리(최대)
-			} else {
-				return false;
-			}
-		}
+        while (left <= right) {
+            int mid = (left + right) / 2;
 
-		return brightPoint >= N;
-	}
+            if (full(arr, N, mid)) {
+                right = mid - 1;
+                min = Math.min(min, mid);
+            } else {
+                left = mid + 1;
+            }
+        }
 
-	static int[] getLights() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		// StringTokenizer st = new StringTokenizer(br.readLine());
+        return min;
+    }
 
-		N = Integer.parseInt(br.readLine()); // 굴다리의 길이
-		M = Integer.parseInt(br.readLine()); // 가로등 개수
+    private static boolean full(int[] arr, int N, int height) {
+        int point = 0;
 
-		int[] lights = new int[M];
-		StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int idx : arr) {
+            if (idx - height <= point) {
+                point = idx + height;
+            } else {
+                return false;
+            }
+        }
 
-		for (int i = 0; i < M; i++) {
-			lights[i] = Integer.parseInt(st.nextToken());
-		}
-
-		return lights;
-	}
+        return point >= N;
+    }
 
 }
