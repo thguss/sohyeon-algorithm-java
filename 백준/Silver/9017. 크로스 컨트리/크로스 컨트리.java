@@ -1,70 +1,81 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	static int T, N;
-	static Map<Integer, Integer> result;
+    static class Team implements Comparable<Team> {
+        int num;
+        int score = 0;
+        List<Integer> al = new ArrayList<>();
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		T = Integer.parseInt(br.readLine());
+        public Team(int num) {
+            this.num = num;
+        }
 
-		while (T-- > 0) {
-			int[] players = getRank(br);
-			System.out.println(solve(players));
-		}
-	}
+        @Override
+        public int compareTo(Team o) {
+            if (this.score == o.score) {
+                return this.al.get(4) - o.al.get(4);
+            }
+            return this.score - o.score;
+        }
+    }
 
-	static int solve(int[] rank) {
-		int[] fifthScore = new int[result.size() + 1];
-		Map<Integer, Integer> scoreMap = new HashMap<>();
-		Map<Integer, Integer> teamMap = new HashMap<>();
-		int score = 1;
+    public static void main(String[] args) throws Exception {
+        //StringTokenizer st = new StringTokenizer(br.readLine());
+        int T = Integer.valueOf(br.readLine());
 
-		for (int element : rank) {
-			if (result.get(element) < 6) continue;
+        while (T-- > 0) {
+            int M = Integer.valueOf(br.readLine());
+            int[] arr = new int[M];
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for (int i = 0; i < M; i++) {
+                arr[i] = Integer.valueOf(st.nextToken());
+            }
+            bw.write(String.valueOf(solve(arr)) + "\n");
+        }
 
-			teamMap.put(element, teamMap.getOrDefault(element, 0) + 1);
+        bw.flush();
+    }
 
-			if (teamMap.get(element) <= 4) { // ㅇ ㅏ 4명까지 합산이네?
-				scoreMap.put(element, scoreMap.getOrDefault(element, 0) + score);
-			}
+    private static int solve(int[] arr) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : arr) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
 
-			if (teamMap.get(element) == 5) {
-				fifthScore[element] = score;
-			}
+        Map<Integer, Team> teamMap = new HashMap<>();
+        int rank = 1;
 
-			score++;
-		}
+        for (int i = 0; i < arr.length; i++) {
+            int num = arr[i];
+            
+            if (map.get(num) != 6) continue;
 
-		List<Integer> keys = new ArrayList<>(scoreMap.keySet());
-		keys.sort((a, b) -> {
-			if (Objects.equals(scoreMap.get(a), scoreMap.get(b))) {
-				return fifthScore[a] - fifthScore[b];
-			}
-			return scoreMap.get(a) - scoreMap.get(b);
-		});
+            if (!teamMap.containsKey(num)) {
+                teamMap.put(num, new Team(num));
+            }
+            
+            Team t = teamMap.get(num);
+            t.al.add(rank);
+            rank++;
+        }
 
-		return keys.get(0);
-	}
+        for (Team team : teamMap.values()) {
+            Collections.sort(team.al);
+            for (int i = 0; i < 4; i++) {
+                team.score += team.al.get(i);
+            }
+        }
 
-	static int[] getRank(BufferedReader br) throws IOException {
-		// BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		// StringTokenizer st = new StringTokenizer(br.readLine());
+        List<Team> teams = new ArrayList<>(teamMap.values());
+        Collections.sort(teams);
 
-		N = Integer.parseInt(br.readLine());
-		result = new HashMap<>();
-		int[] rank = new int[N];
-
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) {
-			int data = Integer.parseInt(st.nextToken());
-			result.put(data, result.getOrDefault(data, 0) + 1);
-			rank[i] = data;
-		}
-
-		return rank;
-	}
+        return teams.get(0).num;
+    }
 
 }
