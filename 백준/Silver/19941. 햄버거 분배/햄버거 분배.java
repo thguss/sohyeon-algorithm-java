@@ -1,54 +1,54 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	static int N, K;
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(st.nextToken());
+        int K = Integer.valueOf(st.nextToken());
+        char[] arr = new char[N];
+        int cnt = 0;
 
-	public static void main(String[] args) throws Exception {
-		char[] table = input();
-		int cnt = 0;
+        String str = br.readLine();
+        for (int i = 0; i < N; i++) {
+            arr[i] = str.charAt(i);
+        }
 
-		for (int i = 0; i < N; i++) {
-			if (table[i] == 'P') {
-				int left = Math.max(0, i - K);
-				boolean isEat = false;
+        for (int i = 0; i < N; i++) {
+            if (arr[i] == 'P') {
+                int left = Math.max(0, i - K);
+                boolean eat = false;
 
-				for (int j = left; j < i; j++) {
-					if (table[j] == 'H') {
-						isEat = true;
-						table[j] = 'X';
-						cnt++;
-						break;
-					}
-				}
+                for (int j = left; j < i; j++) {
+                    if (arr[j] == 'H') {
+                        eat = true;
+                        arr[j] = 'X';
+                        cnt++;
+                        break;
+                    }
+                }
 
-				if (!isEat) {
-					int right = Math.min(N - 1, i + K);
+                if (!eat) {
+                    int right = Math.min(N - 1, i + K);
 
-					for (int j = i + 1; j <= right; j++) {
-						if (table[j] == 'H') {
-							table[j] = 'X';
-							cnt++;
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		System.out.println(cnt);
-		// System.out.println(Arrays.toString(table));
-	}
-
-	static char[] input() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		N = Integer.parseInt(st.nextToken());
-		K = Integer.parseInt(st.nextToken());
-
-		return br.readLine().toCharArray();
-	}
+                    for (int j = i + 1; j <= right; j++) {
+                        if (arr[j] == 'H') {
+                            arr[j] = 'X';
+                            cnt++;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        bw.write(String.valueOf(cnt));
+        bw.flush();
+    }
 
 }
