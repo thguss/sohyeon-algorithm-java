@@ -1,61 +1,57 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	static class Word implements Comparable<Word> {
-		String str;
-		int count;
+    static class Word implements Comparable<Word> {
+        String str;
+        int count;
 
-		Word(String str, int count) {
-			this.str = str;
-			this.count = count;
-		}
+        public Word(String str, int count) {
+            this.str = str;
+            this.count = count;
+        }
 
-		@Override
-		public int compareTo(Word o) {
-			if (this.count == o.count) {
-				if (this.str.length() == o.str.length()) {
-					return this.str.compareTo(o.str);
-				}
-				return o.str.length() - this.str.length();
-			}
-			return o.count - this.count;
-		}
-	}
+        @Override
+        public int compareTo(Word o) {
+            if (this.count == o.count) {
+                if (o.str.length() == this.str.length()) {
+                    return this.str.compareTo(o.str);
+                }
+                return o.str.length() - this.str.length();
+            }
+            return o.count - this.count;
+        }
+    }
 
-	static int N, M;
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(st.nextToken());
+        int M = Integer.valueOf(st.nextToken());
+        Map<String, Integer> map = new HashMap<>();
 
-	public static void main(String[] args) throws Exception {
-		Queue<Word> pq = getQueue();
-		StringBuilder sb = new StringBuilder();
-		while (!pq.isEmpty()) {
-			sb.append(pq.poll().str).append("\n");
-		}
-		System.out.println(sb);
-	}
+        for (int i = 0; i < N; i++) {
+            String str = br.readLine();
+            map.put(str, map.getOrDefault(str, 0) + 1);
+        }
 
-	static Queue<Word> getQueue() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+        Queue<Word> pq = new PriorityQueue<>();
+        
+        for (String key : map.keySet()) {
+            if (key.length() < M) continue;
+            pq.add(new Word(key, map.get(key)));
+        }
 
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+        while (!pq.isEmpty()) {
+            Word word = pq.poll();
+            bw.write(word.str + "\n");
+        }
 
-		Map<String, Integer> map = new HashMap<>();
-
-		for (int i = 0; i < N; i++) {
-			String str = br.readLine();
-			if (str.length() < M) continue;
-			map.put(str, map.getOrDefault(str, 0) + 1);
-		}
-
-		Queue<Word> pq = new PriorityQueue<>();
-		for (String key : map.keySet()) {
-			pq.add(new Word(key, map.get(key)));
-		}
-
-		return pq;
-	}
+        bw.flush();
+    }
 
 }
