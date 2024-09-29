@@ -1,77 +1,60 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	public static void main(String[] args) throws Exception {
-		input();
-	}
+    public static void main(String[] args) throws Exception {
+        //StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(br.readLine());
+        String word = br.readLine();
+        int[] arr = new int['Z' - 'A' + 1];
+        for (int i = 0; i < word.length(); i++) {
+            int idx = word.charAt(i) - 'A';
+            arr[idx]++;
+        }
 
-	static void input() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		// StringTokenizer st = new StringTokenizer(br.readLine());
+        int cnt = 0;
 
-		int N = Integer.parseInt(br.readLine());
+        for (int i = 1; i < N; i++) {
+            String str = br.readLine();
+            if (similar(arr, word, str)) cnt++;
+        }
+        
+        bw.write(String.valueOf(cnt));
+        bw.flush();
+    }
 
-		String first = br.readLine();
-		int[] word = getWord(first);
-		int cnt = 0;
+    private static boolean similar(int[] arr, String word, String str) {
+        if (Math.abs(word.length() - str.length()) > 1) return false;
 
-		for (int i = 1; i < N; i++) {
-			String str = br.readLine();
-			if (isSimilar(word, first, str)) cnt++;
-		}
+        int[] copyArr = arr.clone();
+        int cnt = 0;
 
-		System.out.println(cnt);
-	}
+        for (int i = 0; i < str.length(); i++) {
+            int idx = str.charAt(i) - 'A';
+            if (copyArr[idx] > 0) {
+                copyArr[idx]--;
+                cnt++;
+            }
+        }
 
-	static boolean isSimilar(int[] word, String first, String str) {
-		int[] check = word.clone();
+        if (word.length() == str.length()) {
+            return cnt == str.length() || cnt == str.length() - 1;
+        }
 
-		// 차이 1까지만 허용
-		if (Math.abs(str.length() - first.length()) > 1) return false;
+        if (word.length() == str.length() + 1) {
+            return cnt == str.length();
+        }
 
-		int cnt = 0; // 같은 알파벳 개수
-
-		for (int j = 0; j < str.length(); j++) {
-			int idx = str.charAt(j) - 'A';
-			if (check[idx] > 0) {
-				check[idx]--;
-				cnt++;
-			}
-		}
-
-		// 기준 문자열 길이 = 현재 문자열 길이 + 1
-		if (first.length() == str.length() + 1) {
-			// 현재 문자열 길이가 작으니까, 모든 구성이 같아야 함
-			if (cnt == str.length()) return true;
-		}
-
-		// 현재 문자열 길이 = 기존 문자열 길이 + 1
-		if (first.length() + 1 == str.length()) {
-			// 기존 문자열 길이가 작으니까, 모든 구성이 같아야 함
-			if (cnt == first.length()) return true;
-		}
-
-		if (first.length() == str.length()) {
-			// 모두 같거나
-			if (cnt == str.length()) return true;
-
-			// 다른 거 하나 허용하거나
-			if (cnt == str.length() - 1) return true;
-		}
-
-		return false;
-	}
-
-	static int[] getWord(String str) {
-		int[] word = new int['Z' - 'A' + 1];
-
-		for (int i = 0; i < str.length(); i++) {
-			word[str.charAt(i) - 'A']++;
-		}
-
-		return word;
-	}
+        if (word.length() == str.length() - 1) {
+            return cnt == word.length();
+        }
+        
+        return false;
+    }
 
 }
