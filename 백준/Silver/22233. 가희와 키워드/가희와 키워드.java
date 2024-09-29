@@ -1,40 +1,34 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	static int N, M;
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-	public static void main(String[] args) throws Exception {
-		solve();
-	}
+        int N = Integer.valueOf(st.nextToken());
+        int M = Integer.valueOf(st.nextToken());
+        Set<String> keywords = new HashSet<>();
 
-	static void solve() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            String keyword = br.readLine();
+            keywords.add(keyword);
+        }
 
-		N = Integer.parseInt(st.nextToken()); // 메모장 키워드 개수
-		M = Integer.parseInt(st.nextToken()); // 블로그 키워드 개수
+        for (int i = 0; i < M; i++) {
+            String[] arr = br.readLine().split(",");
+            for (String str : arr) {
+                if (keywords.contains(str)) keywords.remove(str);
+            }
+            bw.write(String.valueOf(keywords.size() + "\n"));
+        }
 
-		Set<String> memoKeywords = new HashSet<>();
-
-		for (int i = 0; i < N; i++) {
-			memoKeywords.add(br.readLine());
-		}
-
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 0; i < M; i++) {
-			String[] arr = br.readLine().split(",");
-
-			for (String str : arr) {
-				memoKeywords.remove(str);
-			}
-
-			sb.append(memoKeywords.size()).append("\n");
-		}
-
-		System.out.println(sb);
-	}
+        
+        bw.flush();
+    }
 
 }
