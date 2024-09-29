@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 14244 KB, 시간: 128 ms
+메모리: 14224 KB, 시간: 96 ms
 
 ### 분류
 
@@ -12,7 +12,7 @@
 
 ### 제출 일자
 
-2024년 4월 12일 03:37:52
+2024년 9월 29일 22:47:26
 
 ### 문제 설명
 
@@ -26,7 +26,7 @@
 
 <p><strong>1. 지구 -> 달로 가는 경우 우주선이 움직일 수 있는 방향은 아래와 같다.</strong></p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/8f6fc516-9870-4ef6-8474-b5d82f7b6f21/-/preview/" style="height: 200px; width: 200px;"><img alt="" src="https://upload.acmicpc.net/eb6f87f0-f4d0-43cc-8e9d-5d94bfc41936/-/preview/" style="height: 200px; width: 200px;"><img alt="" src="" style="height: 200px; width: 200px;"></p>
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/8f6fc516-9870-4ef6-8474-b5d82f7b6f21/-/preview/" style="height: 200px; width: 200px;"><img alt="" src="https://upload.acmicpc.net/eb6f87f0-f4d0-43cc-8e9d-5d94bfc41936/-/preview/" style="height: 200px; width: 200px;"><img alt="" src="https://upload.acmicpc.net/e7b501aa-c92c-4a17-aed7-c7868b89af7a/-/preview/" style="height: 200px; width: 200px;"></p>
 
 <p><strong>2. 우주선은 전에 움직인 방향으로 움직일 수 없다. 즉, 같은 방향으로 두번 연속으로 움직일 수 없다.</strong></p>
 
