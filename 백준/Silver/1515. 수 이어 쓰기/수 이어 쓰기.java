@@ -1,33 +1,34 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	public static void main(String[] args) throws Exception {
-		String str = input();
-		System.out.println(solve(str));
-	}
+    public static void main(String[] args) throws Exception {
+        //StringTokenizer st = new StringTokenizer(br.readLine());
+        String str = br.readLine();
 
-	static int solve(String str) {
-		int check = 0;
-		int base = 0;
+        bw.write(String.valueOf(solve(str)));
+        bw.flush();
+    }
 
-		while (base++ <= 30000) {
-			String temp = String.valueOf(base);
+    private static int solve(String str) {
+        int check = 0;
+        int origin = 0;
 
-			for (int i = 0; i < temp.length(); i++) {
-				if (temp.charAt(i) == str.charAt(check)) check++;
-				if (check == str.length()) return base;
-			}
-		}
+        while (origin++ <= 30000) {
+            String temp = String.valueOf(origin);
 
-		return base;
-	}
+            for (int i = 0; i < temp.length(); i++) {
+                if (temp.charAt(i) == str.charAt(check)) check++;
+                if (check >= str.length()) return origin;
+            }
+        }
 
-	static String input() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		// StringTokenizer st = new StringTokenizer(br.readLine());
-		return br.readLine();
-	}
+        return origin;
+    }
 
 }
