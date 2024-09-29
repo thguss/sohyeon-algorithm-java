@@ -1,44 +1,49 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(st.nextToken());
+        int X = Integer.valueOf(st.nextToken());
+        int[] arr = new int[N];
 
-		int N = Integer.parseInt(st.nextToken()); // 지난 일 수
-		int X = Integer.parseInt(st.nextToken()); // 방문자 수를 확인하는 일 수
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.valueOf(st.nextToken());
+        }
 
-		int[] arr = new int[N + 1];
-		int[] ps = new int[N + 1];
+        int[] visit = new int[N];
+        visit[0] = arr[0];
+        for (int i = 1; i < X; i++) {
+            visit[i] = visit[i - 1] + arr[i];
+        }
 
-		st = new StringTokenizer(br.readLine());
-		for (int i = 1; i <= N; i++) {
-			arr[i] = arr[i - 1] + Integer.parseInt(st.nextToken());
-		}
+        int max = visit[X - 1];
+        int count = 1;
 
-		for (int i = X; i <= N; i++) {
-			ps[i] = arr[i] - arr[i - X];
-		}
+        for (int i = X; i < N; i++) {
+            visit[i] = visit[i - 1] + arr[i] - arr[i - X];
+            if (max < visit[i]) {
+                max = visit[i];
+                count = 1;
+            } else if (max == visit[i]) {
+                count++;
+            }
+        }
 
-		int max = 0;
-		int cnt = 0;
-		for (int i = X; i < ps.length; i++) {
-			if (ps[i] > max) {
-				cnt = 1;
-				max = ps[i];
-			} else if (ps[i] == max) {
-				cnt++;
-			}
-		}
+        if (max != 0) {
+            bw.write(String.valueOf(max) + "\n" + String.valueOf(count));
+        } else {
+            bw.write("SAD");
+        }
 
-		if (max != 0) {
-			System.out.println(max);
-			System.out.println(cnt);
-		} else {
-			System.out.println("SAD");
-		}
+        bw.flush();
+    }
 
-	}
 }

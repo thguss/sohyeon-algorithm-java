@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 36092 KB, 시간: 372 ms
+메모리: 39988 KB, 시간: 344 ms
 
 ### 분류
 
@@ -12,7 +12,7 @@
 
 ### 제출 일자
 
-2023년 11월 10일 23:26:50
+2024년 9월 29일 16:28:48
 
 ### 문제 설명
 
@@ -20,7 +20,7 @@
 
 <p>요즘 바빠서 관리를 못 했다가 방문 기록을 봤더니 벌써 누적 방문 수가 6만을 넘었다.</p>
 
-<p style="text-align: center;"><img alt="" src="" style="height: 295px; width: 600px;"></p>
+<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/5f95a11c-b879-408b-b3be-dcaa915f36ab/-/preview/" style="height: 295px; width: 600px;"></p>
 
 <p>찬솔이는 <mjx-container class="MathJax" jax="CHTML" style="font-size: 109%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D44B TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>X</mi></math></mjx-assistive-mml><span aria-hidden="true" class="no-mathjax mjx-copytext">$X$</span></mjx-container>일 동안 가장 많이 들어온 방문자 수와 그 기간들을 알고 싶다.</p>
 
