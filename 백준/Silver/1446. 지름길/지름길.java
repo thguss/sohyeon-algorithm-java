@@ -1,67 +1,70 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	static class Road implements Comparable<Road> {
-		int s;
-		int e;
-		int c;
+    static class Road implements Comparable<Road> {
+        int start;
+        int end;
+        int cost;
 
-		Road(int s, int e, int c) {
-			this.s = s;
-			this.e = e;
-			this.c = c;
-		}
+        public Road(int start, int end, int cost) {
+            this.start = start;
+            this.end = end;
+            this.cost = cost;
+        }
 
-		@Override
-		public int compareTo(Road o) {
-			if (this.s == o.s) {
-				return this.e - o.e;
-			}
-			return this.s - o.s;
-		}
-	}
+        @Override
+        public int compareTo(Road o) {
+            if (this.start == o.start) {
+                return this.end - o.end;
+            }
+            return this.start - o.start;
+        }
+    }
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(st.nextToken());
+        int D = Integer.valueOf(st.nextToken());
+        List<Road> roads = new ArrayList<>();
 
-		List<Road> al = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            int start = Integer.valueOf(st.nextToken());
+            int end = Integer.valueOf(st.nextToken());
+            int cost = Integer.valueOf(st.nextToken());
+            roads.add(new Road(start, end, cost));
+        }
 
-		int N = Integer.parseInt(st.nextToken());
-		int D = Integer.parseInt(st.nextToken());
+        Collections.sort(roads);
 
-		for (int i = 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine());
-			int s = Integer.parseInt(st.nextToken());
-			int e = Integer.parseInt(st.nextToken());
-			int c = Integer.parseInt(st.nextToken());
-			if (s > e || (e - s) <= c) continue;
-			al.add(new Road(s, e, c));
-		}
+        int[] distances = new int[10001];
+        Arrays.fill(distances, Integer.MAX_VALUE);
+        distances[0] = 0;
 
-		Collections.sort(al);
+        int idx = 0;
+        int distance = 0;
 
-		int[] distance = new int[10001];
-		Arrays.fill(distance, 10001);
-		distance[0] = 0;
+        while (distance < D) {
+            if (idx < roads.size()) {
+                Road road = roads.get(idx);
+                if (distance == road.start) {
+                    distances[road.end] = Math.min(distances[road.end], distances[distance] + road.cost);
+                    idx++;
+                    continue;
+                }
+            }
+            distances[distance + 1] = Math.min(distances[distance + 1], distances[distance] + 1);
+            distance++;
+        }
 
-		int idx = 0, move = 0;
-		while (move < D) {
-			if (idx < al.size()) {
-				Road r = al.get(idx);
-				if (move == r.s) {
-					distance[r.e] = Math.min(distance[r.e], distance[move] + r.c);
-					idx++;
-					continue;
-				}
-			}
-			distance[move + 1] = Math.min(distance[move + 1], distance[move] + 1);
-			move++;
-		}
+        bw.write(String.valueOf(distances[D]));
+        bw.flush();
+    }
 
-		System.out.println(distance[D]);
-
-	}
 }
