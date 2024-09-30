@@ -1,63 +1,51 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
-	static int N, K;
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	public static void main(String[] args) throws Exception {
-		getInput();
-		System.out.println(bfs());
-	}
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(st.nextToken());
+        int K = Integer.valueOf(st.nextToken());
 
-	static int bfs() {
-		boolean[] visited = new boolean[200002];
-		visited[N] = true;
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[] {N, 0});
+        boolean[] visited = new boolean[200002];
+        visited[N] = true;
+        int min = Integer.MAX_VALUE;
 
-		Queue<int[]> queue = new LinkedList<>();
-		queue.add(new int[] {N, 0});
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            if (cur[0] == K) {
+                min = Math.min(min, cur[1]);
+                continue;
+            }
 
-		while (!queue.isEmpty()) {
-			int[] cur = queue.poll();
+            int next = cur[0] + 1;
+            if (0 <= next && next < 100002 && !visited[next]) {
+                visited[next] = true;
+                queue.add(new int[] {next, cur[1] + 1});
+            }
 
-			if (cur[0] == K) {
-				return cur[1];
-			}
+            next = cur[0] - 1;
+            if (0 <= next && next < 100002 && !visited[next]) {
+                visited[next] = true;
+                queue.add(new int[] {next, cur[1] + 1});
+            }
 
-			// X - 1
-			int pos = cur[0] - 1;
-			if (isValid(pos, visited)) {
-				visited[pos] = true;
-				queue.add(new int[] {pos, cur[1] + 1});
-			}
-
-			// X + 1
-			pos = cur[0] + 1;
-			if (isValid(pos, visited)) {
-				visited[pos] = true;
-				queue.add(new int[] {pos, cur[1] + 1});
-			}
-
-			// 2*X
-			pos = cur[0] * 2;
-			if (isValid(pos, visited)) {
-				visited[pos] = true;
-				queue.add(new int[] {pos, cur[1] + 1});
-			}
-		}
-
-		return -1;
-	}
-
-	static boolean isValid(int x, boolean[] visited) {
-		return (0 <= x && x <= 100000 && !visited[x]);
-	}
-
-	static void getInput() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		N = Integer.parseInt(st.nextToken()); // 수빈 위치
-		K = Integer.parseInt(st.nextToken()); // 동생 위치
-	}
+            next = cur[0] * 2;
+            if (0 <= next && next < 100002 && !visited[next]) {
+                visited[next] = true;
+                queue.add(new int[] {next, cur[1] + 1});
+            }
+        }
+        
+        bw.write(String.valueOf(min != Integer.MAX_VALUE ? min : -1));
+        bw.flush();
+    }
 
 }
