@@ -1,122 +1,66 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
-	static int N, K;
-	static int cnt = 0;
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	public static void main(String[] args) throws Exception {
-		int[][] container = getContainer();
-		System.out.println(solve(container));
-	}
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(st.nextToken());
+        int K = Integer.valueOf(st.nextToken());
 
-	static int solve(int[][] container) {
-		boolean[] robot = new boolean[N];
-		int time = 1;
+        int[] arr = new int[2 * N];
+        boolean[] robot = new boolean[N];
+        int step = 1;
 
-		while (true) {
-			// for (int i = 0; i < 2 * N; i++) {
-			// 	System.out.print(container[i][0] + " ");
-			// }
-			// System.out.println();
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < 2 * N; i++) {
+            arr[i] = Integer.valueOf(st.nextToken());
+            if (arr[i] == 0) K--;
+        }
 
-			// 1. 벨트 회전
-			turnContainer(container, robot);
+        while(true) {
+            // step1
+            int last = arr[2 * N - 1];
+            for (int i = 2 * N - 1; i > 0; i--) {
+                arr[i] = arr[i - 1];
+            }
+            arr[0] = last;
 
-			// 2. 로봇 이동
-			moveRobot(container, robot);
+            for (int i = N - 1; i > 0; i--) {
+                robot[i] = robot[i - 1];
+            }
+            robot[0] = false;
+            robot[N - 1] = false;
+    
+            // step2
+            for (int i = N - 2; i >= 0; i--) {
+                if (robot[i] && !robot[i + 1] && arr[i + 1] > 0) {
+                    robot[i] = false;
+                    robot[i + 1] = true;
+                    arr[i + 1]--;
+                    if (arr[i + 1] == 0) K--;
+                }
+            }
+            robot[N - 1] = false;
 
-			// 3. 로봇 올리기
-			boardRobot(container, robot);
+            // step3
+            if (arr[0] >= 1 && !robot[0]) {
+                robot[0] = true;
+                arr[0]--;
+                if (arr[0] == 0) K--;
+            }
 
-			// 4. 내구도 0인 위치가 K개 이상이면 종료, 아니면 반복
-			// int temp = 0;
-			// for (int i = 0; i < N * 2; i++) {
-			// 	if (container[i][0] <= 0) temp++;
-			// }
-			if (cnt >= K) break;
-			time++;
-		}
-
-		return time;
-	}
-
-	static void boardRobot(int[][] container, boolean[] robot) {
-		if (!robot[0] && container[0][0] > 0) {
-			container[0][0]--;
-			robot[0] = true;
-
-			if (container[0][0] == 0 && container[0][1] == 0) {
-				cnt++;
-				container[0][1] = 1; // visit
-			}
-		}
-	}
-
-	static void moveRobot(int[][] container, boolean[] robot) {
-		for (int i = N - 1; i >= 0; i--) {
-			if (!robot[i]) continue;
-
-			int next = i + 1;
-
-			if (next == N) {
-				robot[i] = false;
-				continue;
-			}
-
-			if (next < N && !robot[next]) {
-				if (container[next][0] > 0) {
-					robot[next] = true;
-					robot[i] = false;
-					container[next][0]--;
-
-					if (container[next][0] == 0 && container[next][1] == 0) {
-						cnt++;
-						container[next][1] = 1; // visit
-					}
-				}
-			}
-		}
-	}
-
-	static void turnRobot(boolean[] robot) {
-		for (int i = N - 1; i > 0; i--) {
-			robot[i] = robot[i - 1];
-		}
-
-		robot[0] = false;
-	}
-
-	static void turnContainer(int[][] container, boolean[] robot) {
-		int temp1 = container[N * 2 - 1][0];
-		int temp2 = container[N * 2 - 1][1];
-
-		for (int i = N * 2 - 1; i > 0; i--) {
-			container[i][0] = container[i - 1][0];
-			container[i][1] = container[i - 1][1];
-		}
-
-		container[0][0] = temp1;
-		container[0][1] = temp2;
-
-		turnRobot(robot);
-	}
-
-	static int[][] getContainer() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		N = Integer.parseInt(st.nextToken()); // 컨테이너 크기
-		K = Integer.parseInt(st.nextToken()); // 내구도 0 허용 개수
-
-		int[][] container = new int[N * 2][2];
-		st = new StringTokenizer(br.readLine());
-
-		for (int i = 0; i < N * 2; i++) {
-			container[i][0] = Integer.parseInt(st.nextToken());
-		}
-
-		return container;
-	}
+            // step4
+            if (K <= 0) break;
+            step++;
+        }
+        
+        bw.write(String.valueOf(step));
+        bw.flush();
+    }
 
 }
