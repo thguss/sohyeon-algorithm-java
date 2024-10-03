@@ -1,40 +1,41 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
-	static String S, T;
-	static int res = 0;
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	public static void main(String[] args) throws Exception {
-		input();
-		transfer(T);
-		System.out.println(res);
-	}
+    static boolean res = false;
+    static String S, T;
 
-	static void transfer(String str) {
-		if (res == 1) return;
+    public static void main(String[] args) throws Exception {
+        // StringTokenizer st = new StringTokenizer(br.readLine());
+        S = br.readLine();
+        T = br.readLine();
 
-		if (S.length() == str.length()) {
-			if (S.equals(str)) res = 1;
-			return;
-		}
+        dfs(T);
 
-		if (str.charAt(str.length() - 1) == 'A') {
-			transfer(str.substring(0, str.length() - 1));
-		}
+        bw.write(res ? "1" : "0");
+        bw.flush();
+    }
 
-		if (str.charAt(0) == 'B') {
-			StringBuilder sb = new StringBuilder(str.substring(1));
-			transfer(sb.reverse().toString());
-		}
-	}
+    private static void dfs(String str) {
+        if (res) return;
+        
+        if (str.length() == S.length()) {
+            if (str.equals(S)) res = true;
+            return;
+        }
 
-	static void input() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		// StringTokenizer st = new StringTokenizer(br.readLine());
+        if (str.charAt(str.length() - 1) == 'A') {
+            dfs(str.substring(0, str.length() - 1));
+        }
 
-		S = br.readLine();
-		T = br.readLine();
-	}
+        if (str.charAt(0) == 'B') {
+            dfs(new StringBuilder(str).reverse().toString().substring(0, str.length() - 1));
+        }
+    }
 
 }
