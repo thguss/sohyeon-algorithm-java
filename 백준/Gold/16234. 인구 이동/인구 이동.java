@@ -1,86 +1,108 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	static int[] dx = {1, -1, 0, 0};
-	static int[] dy = {0, 0, 1, -1};
-	static boolean[][] visited;
-	static int N, L, R;
-	static int move;
+    static class Unit {
+        int sum = 0;
+        int cnt = 0;
+        List<int[]> al = new ArrayList<>();
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+        Unit() {
+        }
+    }
 
-		N = Integer.parseInt(st.nextToken());
-		L = Integer.parseInt(st.nextToken());
-		R = Integer.parseInt(st.nextToken());
+    static int[] dx = {1, -1, 0, 0};
+    static int[] dy = {0, 0, 1, -1};
 
-		int[][] map = new int[N][N];
+    static List<Unit> units;
+    static boolean[][] visited;
+    static int[][] arr;
+    static int N, L, R;
+    
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.valueOf(st.nextToken());
+        L = Integer.valueOf(st.nextToken());
+        R = Integer.valueOf(st.nextToken());
 
-		for (int i = 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine());
-			for (int j = 0; j < N; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());
-			}
-		}
+        arr = new int[N][N];
 
-		int cnt = 0;
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < N; j++) {
+                arr[i][j] = Integer.valueOf(st.nextToken());
+            }
+        }
 
-		while (true) {
-			move = 0;
-			visited = new boolean[N][N];
+        int step = 1;
 
-			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < N; j++) {
-					if (visited[i][j]) continue;
-					visited[i][j] = true;
-					moving(i, j, map);
-				}
-			}
+        while (true) {
+            units = new ArrayList<>();
+            visited = new boolean[N][N];
 
-			if (move == 0) break;
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (visited[i][j]) continue;
+                    bfs(i, j);
+                }
+            }
 
-			cnt++;
-		}
+            if (units.size() == 0) break;
 
-		System.out.println(cnt);
+            for (Unit unit : units) {
+                int avg = unit.sum / unit.cnt;
 
-	}
+                for (int[] pos : unit.al) {
+                    arr[pos[0]][pos[1]] = avg;
+                }
+            }
 
-	private static void moving(int x, int y, int[][] map) {
-		Queue<int[]> queue = new LinkedList<>();
-		queue.add(new int[] {x, y});
+            step++;
+        }
 
-		int sum = map[x][y];
+        bw.write(String.valueOf(step - 1));
+        bw.flush();
 
-		List<int[]> al = new ArrayList<>();
-		al.add(new int[] {x, y});
+    }
 
-		while (!queue.isEmpty()) {
-			int[] cur = queue.poll();
+    static void bfs(int startI, int startJ) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[] {startI, startJ});
+        visited[startI][startJ] = true;
 
-			for (int i = 0; i < 4; i++) {
-				int nx = cur[0] + dx[i], ny = cur[1] + dy[i];
-				if (0 <= nx && nx < N && 0 <= ny && ny < N) {
-					if (visited[nx][ny]) continue;
+        Unit unit = new Unit();
+        unit.al.add(new int[] {startI, startJ});
+        unit.sum = arr[startI][startJ];
+        unit.cnt = 1;
 
-					int diff = Math.abs(map[nx][ny] - map[cur[0]][cur[1]]);
-					if (!(L <= diff && diff <= R)) continue;
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            int x = cur[0];
+            int y = cur[1];
 
-					visited[nx][ny] = true;
-					sum += map[nx][ny];
-					queue.add(new int[] {nx, ny});
-					al.add(new int[] {nx, ny});
-					move++;
-				}
-			}
-		}
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
 
-		int avg = sum / al.size();
-		for (int[] pos : al) {
-			map[pos[0]][pos[1]] = avg;
-		}
-	}
+                if (0 <= nx && nx < N && 0 <= ny && ny < N && !visited[nx][ny]) {
+                    int abs = Math.abs(arr[nx][ny] - arr[x][y]);
+                    if (L <= abs && abs <= R) {
+                        visited[nx][ny] = true;
+                        unit.al.add(new int[] {nx, ny});
+                        unit.sum += arr[nx][ny];
+                        unit.cnt++;
+                        queue.add(new int[] {nx, ny});
+                    }
+                }
+            }
+        }
+
+        if (unit.cnt > 1) units.add(unit);
+    }
+
 }
