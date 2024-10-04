@@ -1,56 +1,56 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	static int H, W;
+    private static int solve(int[][] board, int H, int W) {
+        int sum = 0;
 
-	public static void main(String[] args) throws Exception {
-		int[][] board = getBoard();
+        // for (int i = 0; i < H; i++) {
+        //     System.out.println(Arrays.toString(board[i]));
+        // }
 
-		// for (int[] arr : board) {
-		// 	System.out.println(Arrays.toString(arr));
-		// }
+        for (int i = 0; i < H; i++) {
+            boolean guard = false;
+            int cnt = 0;
 
-		int sum = 0;
+            for (int j = 0; j < W; j++) {
+                if (board[i][j] == 1 && guard) {
+                    sum += cnt;
+                    cnt = 0;
+                } else if (board[i][j] == 1 && !guard) {
+                    guard = true;
+                } else if (board[i][j] == 0 && guard) {
+                    cnt++;
+                }
+            }
+        }
 
-		for (int i = 0; i < H; i++) {
-			boolean isLeft = false;
-			int cnt = 0;
-			for (int j = 0; j < W; j++) {
-				if (board[i][j] == 0 && isLeft) {
-					cnt++;
-				} else if (board[i][j] == 1 && isLeft) {
-					sum += cnt;
-					cnt = 0;
-				} else if (board[i][j] == 1 && !isLeft) {
-					isLeft = true;
-				}
-			}
-		}
+        return sum;
+    }
 
-		System.out.println(sum);
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int H = Integer.valueOf(st.nextToken());
+        int W = Integer.valueOf(st.nextToken());
+        int[][] board = new int[H][W];
 
-	}
+        st = new StringTokenizer(br.readLine());
+        for (int j = 0; j < W; j++) {
+            int height = Integer.valueOf(st.nextToken());
+            for (int i = 0; i < height; i++) {
+                board[i][j] = 1;
+            }
+        }
 
-	static int[][] getBoard() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+        int sum = solve(board, H, W);
 
-		H = Integer.parseInt(st.nextToken());
-		W = Integer.parseInt(st.nextToken());
-
-		int[][] board = new int[H][W];
-		st = new StringTokenizer(br.readLine());
-
-		for (int i = 0; i < W; i++) {
-			int height = Integer.parseInt(st.nextToken());
-			for (int j = 0; j < height; j++) {
-				board[H - 1 - j][i] = 1;
-			}
-		}
-
-		return board;
-	}
+        bw.write(String.valueOf(sum));
+        bw.flush();
+    }
 
 }
