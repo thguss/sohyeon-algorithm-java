@@ -1,66 +1,78 @@
-
-import java.io.*;
 import java.util.*;
+import java.lang.*;
+import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	static int N, M;
-	static int[] visited = new int[101];
-	static int[] board = new int[101];
+    private static int solve(Map<Integer, Integer> stairs, Map<Integer, Integer> slidings) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[] {1, 0});
+        boolean[] visited = new boolean[101];
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            int num = cur[0];
+            int cnt = cur[1];
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+            //visited[num] = true;
 
-		for (int i = 1; i <= 100; i++) {
-			board[i] = i;
-		}
+            if (num == 100) {
+                return cnt;
+            }
 
-		for (int i = 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine());
-			int x = Integer.parseInt(st.nextToken());
-			int y = Integer.parseInt(st.nextToken());
-			board[x] = y;
-		}
+            for (int i = 1; i <= 6; i++) {
+                int next = num + i;
 
-		for (int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
-			int u = Integer.parseInt(st.nextToken());
-			int v = Integer.parseInt(st.nextToken());
-			board[u] = v;
-		}
+                if (next > 100) continue;
 
-		System.out.println(bfs());
+                while (stairs.containsKey(next) || slidings.containsKey(next)) {
+                    if (stairs.containsKey(next)) {
+                        next = stairs.get(next);
+                    }
+                    
+                    if (slidings.containsKey(next)) {
+                        next = slidings.get(next);
+                    }
+                }
 
-	}
+                if (!visited[next]) {
+                    visited[next] = true;
+                    queue.add(new int[] {next, cnt + 1});
+                }
+            }
+        }
 
-	private static int bfs() {
-		Queue<Integer> queue = new LinkedList<>();
-		queue.add(1);
+        return -1;
+    }
 
-		while (!queue.isEmpty()) {
-			int now = queue.poll();
+    public static void main(String[] args) throws Exception {
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.valueOf(st.nextToken());
+        int M = Integer.valueOf(st.nextToken());
+        Map<Integer, Integer> stairs = new HashMap<>();
+        Map<Integer, Integer> slidings = new HashMap<>();
 
-			if (board[now] == 100) {
-				return visited[100];
-			}
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            int u = Integer.valueOf(st.nextToken());
+            int v = Integer.valueOf(st.nextToken());
+            stairs.put(u, v);
+        }
 
-			for (int i = 1; i <= 6; i++) {
-				int next = now + i;
-				if (next > 100)
-					continue;
-				next = board[next];
-				if (visited[next] == 0) {
-					visited[next] = visited[now] + 1;
-					queue.add(next);
-				}
-			}
-		}
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int u = Integer.valueOf(st.nextToken());
+            int v = Integer.valueOf(st.nextToken());
+            slidings.put(u, v);
+        }
 
-		return -1;
+        int res = solve(stairs, slidings);
+        
+        bw.write(String.valueOf(res));
+        bw.flush();
+    }
 
-	}
 }
