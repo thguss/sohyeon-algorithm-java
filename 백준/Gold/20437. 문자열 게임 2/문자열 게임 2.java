@@ -1,58 +1,58 @@
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class Main {
+// The main method must be in a class named "Main".
+class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-	public static void main(String[] args) throws Exception {
-		input();
-	}
+    private static void solve(String str, int K) throws Exception {
+        if (K == 1) {
+            bw.write("1 1\n");
+            return;
+        }
 
-	static void input() throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		// StringTokenizer st = new StringTokenizer(br.readLine());
+        int min = Integer.MAX_VALUE;
+        int max = -1;
 
-		int T = Integer.parseInt(br.readLine());
+        Map<Character, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            map.putIfAbsent(ch, new ArrayList<>());
+            map.get(ch).add(i);
+        }
 
-		StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Character, List<Integer>> entry : map.entrySet()) {
+            List<Integer> indexes = entry.getValue();
 
-		while (T-- > 0) {
-			String str = br.readLine();
-			int K = Integer.parseInt(br.readLine());
-			sb.append(getRes(str, K)).append("\n");
-		}
+            if (indexes.size() >= K) {
+                for (int i = 0; i <= indexes.size() - K; i++) {
+                    int len = indexes.get(i + K - 1) - indexes.get(i) + 1;
+                    min = Math.min(min, len);
+                    max = Math.max(max, len);
+                }
+            }
+        }
 
-		System.out.println(sb);
-	}
+        if (min == Integer.MAX_VALUE || max == -1) {
+            bw.write("-1\n");
+        } else {
+            bw.write(String.valueOf(min) + " " + String.valueOf(max) + "\n");
+        }
+    }
 
-	static String getRes(String str, int K) {
-		if (K == 1) return "1 1";
+    public static void main(String[] args) throws Exception {
+        //StringTokenizer st = new StringTokenizer(br.readLine());
+        int T = Integer.valueOf(br.readLine());
 
-		int[] alpha = new int['z' - 'a' + 1];
-
-		for (int i = 0; i < str.length(); i++) {
-			alpha[str.charAt(i) - 'a']++;
-		}
-
-		int min = Integer.MAX_VALUE;
-		int max = 0;
-
-		for (int i = 0; i < str.length(); i++) {
-			if (alpha[str.charAt(i) - 'a'] < K) continue;
-
-			int count = 1;
-			for (int j = i + 1; j < str.length(); j++) {
-				if (str.charAt(i) == str.charAt(j)) count++;
-
-				if (count == K) {
-					min = Math.min(min, j - i + 1);
-					max = Math.max(max, j - i + 1);
-					break;
-				}
-			}
-		}
-
-		if (max == 0 || min == Integer.MAX_VALUE) return "-1";
-		else return min + " " + max;
-	}
+        while (T-- > 0) {
+            String str = br.readLine();
+            int K = Integer.valueOf(br.readLine());
+            solve(str, K);
+        }
+        
+        bw.flush();
+    }
 
 }
